@@ -1,0 +1,32 @@
+{
+	"name": "recursive-proxy",
+	"version": "0.1.0",
+	"description": "Creates a recursive proxy",
+	"license": "MIT",
+	"repository": "YeasterEgg/recursive-proxy",
+	"author": {
+		"name": "Yeasteregg",
+		"email": "l.d.mattiazzi@gmail.com",
+		"url": "https://grokked.it"
+	},
+	"engines": {
+		"node": ">=6"
+	},
+	"scripts": {
+		"watch": "tsc --watch",
+		"build": "tsc"
+	},
+	"main": "dist/index.js",
+	"files": [
+		"dist/"
+	],
+	"types": "dist/index.d.ts",
+	"keywords": [
+		"proxy"
+	],
+	"dependencies": {},
+	"devDependencies": {
+		"@types/node": "^11.10.4",
+		"typescript": "^3.3.3333"
+	}
+}
