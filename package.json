@@ -1,9 +1,9 @@
 {
-	"name": "recursive-proxy",
+	"name": "path-extractor-proxy",
 	"version": "0.1.0",
-	"description": "Creates a recursive proxy",
+	"description": "Creates a recursive proxy that extracts path and returns a function",
 	"license": "MIT",
-	"repository": "YeasterEgg/recursive-proxy",
+	"repository": "YeasterEgg/path-extractor-proxy",
 	"author": {
 		"name": "Yeasteregg",
 		"email": "l.d.mattiazzi@gmail.com",
