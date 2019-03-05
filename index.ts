@@ -1,4 +1,4 @@
-type HandlerFunction = (path: string, options: RequestInit) => any
+export type HandlerFunction = (path: string, options: RequestInit) => any
 
 const voidFn = (): void => {}
 
@@ -29,7 +29,7 @@ const methodHandlers = {
 	},
 }
 
-function RecursiveProxy(
+export function RecursiveProxy(
 	handlerFn?: HandlerFunction,
 	options?: RequestInit,
 	path: (string | number)[] = [],
@@ -54,5 +54,3 @@ function RecursiveProxy(
 	}
 	return new Proxy(voidFn, { get, apply })
 }
-
-module.exports = { RecursiveProxy }

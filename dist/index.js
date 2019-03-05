@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const voidFn = () => { };
 const methodHandlers = {
     get: (path, options, handlerFn) => (body) => {
@@ -50,4 +52,4 @@ function RecursiveProxy(handlerFn, options, path = []) {
     }
     return new Proxy(voidFn, { get, apply });
 }
-module.exports = { RecursiveProxy };
+exports.RecursiveProxy = RecursiveProxy;
