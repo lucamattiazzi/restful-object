@@ -1,10 +1,10 @@
 const { RecursiveProxy } = require('./dist/index')
 
-const base = async (path, input) => {
-	const url = `${path.join('/')}/${input}`
-	return Promise.resolve(url)
+const baseFn = (path, options) => {
+	return [path]
 }
 
-const proxied = new RecursiveProxy(base)
+const proxied = new RecursiveProxy(baseFn, { headers: { xauth: 'astst' } })
 
-proxied.api.author(2).then(r => console.log(r))
+const results = proxied.api.community.groups(4).recipes.get({ author: 'asdasd' })
+console.log('results', results)

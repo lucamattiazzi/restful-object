@@ -1,9 +1,9 @@
 {
-	"name": "path-extractor-proxy",
-	"version": "0.1.0",
-	"description": "Creates a recursive proxy that extracts path and returns a function",
+	"name": "restful-object",
+	"version": "0.5.0",
+	"description": "A proxy that turns an object/function entity into a restful request generator",
 	"license": "MIT",
-	"repository": "YeasterEgg/path-extractor-proxy",
+	"repository": "YeasterEgg/restful-object",
 	"author": {
 		"name": "Yeasteregg",
 		"email": "l.d.mattiazzi@gmail.com",
@@ -22,7 +22,7 @@
 	],
 	"types": "dist/index.d.ts",
 	"keywords": [
-		"proxy"
+		"proxy", "rest"
 	],
 	"dependencies": {},
 	"devDependencies": {
