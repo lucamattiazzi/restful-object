@@ -25,9 +25,7 @@
 		"proxy",
 		"rest"
 	],
-	"dependencies": {
-		"restful-object": "^0.7.0"
-	},
+	"dependencies": {},
 	"devDependencies": {
 		"@types/node": "^11.10.4",
 		"typescript": "^3.3.3333"
