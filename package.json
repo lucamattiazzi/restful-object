@@ -1,6 +1,6 @@
 {
 	"name": "restful-object",
-	"version": "0.6.0",
+	"version": "0.7.1",
 	"description": "A proxy that turns an object/function entity into a restful request generator",
 	"license": "MIT",
 	"repository": "YeasterEgg/restful-object",
@@ -22,9 +22,12 @@
 	],
 	"types": "dist/index.d.ts",
 	"keywords": [
-		"proxy", "rest"
+		"proxy",
+		"rest"
 	],
-	"dependencies": {},
+	"dependencies": {
+		"restful-object": "^0.7.0"
+	},
 	"devDependencies": {
 		"@types/node": "^11.10.4",
 		"typescript": "^3.3.3333"

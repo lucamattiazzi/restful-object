@@ -18,7 +18,13 @@ const methodHandlers = {
 		specificOptions: RequestInit = {},
 	) => {
 		const body = typeof rawBody === 'string' ? rawBody : JSON.stringify(rawBody)
-		const completeOptions = Object.assign({}, options, specificOptions, { method: 'POST', body })
+		const completeOptions = Object.assign({}, options, specificOptions, {
+			method: 'POST',
+			body,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
 		if (handlerFn) return handlerFn(path, completeOptions)
 		return { path, options: completeOptions }
 	},
