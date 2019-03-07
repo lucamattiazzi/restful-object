@@ -4,26 +4,38 @@ const voidFn = (): void => {}
 
 const methodHandlers = {
 	get: (path: string, options: RequestInit, handlerFn: HandlerFunction) => (
-		body: string | string[][] | Record<string, string> | URLSearchParams,
+		body?: string | string[][] | Record<string, string> | URLSearchParams,
+		specificOptions: RequestInit = {},
 	) => {
 		const urlParams = new URLSearchParams(body)
-		const completePath = `${path}?${urlParams.toString()}`
-		const completeOptions = Object.assign({}, options, { method: 'GET' })
+		const completePath = body ? `${path}?${urlParams.toString()}` : path
+		const completeOptions = Object.assign({}, options, specificOptions, { method: 'GET' })
 		if (handlerFn) return handlerFn(completePath, completeOptions)
 		return { path: completePath, options: completeOptions }
 	},
-	post: (path: string, options: RequestInit, handlerFn: HandlerFunction) => (body: Object) => {
-		const completeOptions = Object.assign({}, options, { method: 'POST', body })
+	post: (path: string, options: RequestInit, handlerFn: HandlerFunction) => (
+		rawBody: Object | string,
+		specificOptions: RequestInit = {},
+	) => {
+		const body = typeof rawBody === 'string' ? rawBody : JSON.stringify(rawBody)
+		const completeOptions = Object.assign({}, options, specificOptions, { method: 'POST', body })
 		if (handlerFn) return handlerFn(path, completeOptions)
 		return { path, options: completeOptions }
 	},
-	put: (path: string, options: RequestInit, handlerFn: HandlerFunction) => (body: Object) => {
-		const completeOptions = Object.assign({}, options, { method: 'PUT', body })
+	put: (path: string, options: RequestInit, handlerFn: HandlerFunction) => (
+		rawBody: Object,
+		specificOptions: RequestInit = {},
+	) => {
+		const body = typeof rawBody === 'string' ? rawBody : JSON.stringify(rawBody)
+		const completeOptions = Object.assign({}, options, specificOptions, { method: 'PUT', body })
 		if (handlerFn) return handlerFn(path, completeOptions)
 		return { path, options: completeOptions }
 	},
-	delete: (path: string, options: RequestInit, handlerFn: HandlerFunction) => () => {
-		const completeOptions = Object.assign({}, options, { method: 'DELETE' })
+	delete: (path: string, options: RequestInit, handlerFn: HandlerFunction) => (
+		body?: string | number,
+		specificOptions: RequestInit = {},
+	) => {
+		const completeOptions = Object.assign({}, options, specificOptions, { method: 'DELETE' })
 		if (handlerFn) return handlerFn(path, completeOptions)
 		return { path, options: completeOptions }
 	},
