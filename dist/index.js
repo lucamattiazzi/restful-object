@@ -1,18 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const lodash_1 = require("lodash");
 const voidFn = () => { };
 const methodHandlers = {
     get: (path, options, handlerFn) => (body, specificOptions = {}) => {
         const urlParams = new URLSearchParams(body);
         const completePath = body ? `${path}?${urlParams.toString()}` : path;
-        const completeOptions = Object.assign({}, options, specificOptions, { method: 'GET' });
+        const completeOptions = lodash_1.merge({}, options, specificOptions, { method: 'GET' });
         if (handlerFn)
             return handlerFn(completePath, completeOptions);
         return { path: completePath, options: completeOptions };
     },
     post: (path, options, handlerFn) => (rawBody, specificOptions = {}) => {
         const body = typeof rawBody === 'string' ? rawBody : JSON.stringify(rawBody);
-        const completeOptions = Object.assign({}, options, specificOptions, {
+        const completeOptions = lodash_1.merge({}, options, specificOptions, {
             method: 'POST',
             body,
             headers: {
@@ -25,13 +26,13 @@ const methodHandlers = {
     },
     put: (path, options, handlerFn) => (rawBody, specificOptions = {}) => {
         const body = typeof rawBody === 'string' ? rawBody : JSON.stringify(rawBody);
-        const completeOptions = Object.assign({}, options, specificOptions, { method: 'PUT', body });
+        const completeOptions = lodash_1.merge({}, options, specificOptions, { method: 'PUT', body });
         if (handlerFn)
             return handlerFn(path, completeOptions);
         return { path, options: completeOptions };
     },
     delete: (path, options, handlerFn) => (body, specificOptions = {}) => {
-        const completeOptions = Object.assign({}, options, specificOptions, { method: 'DELETE' });
+        const completeOptions = lodash_1.merge({}, options, specificOptions, { method: 'DELETE' });
         if (handlerFn)
             return handlerFn(path, completeOptions);
         return { path, options: completeOptions };

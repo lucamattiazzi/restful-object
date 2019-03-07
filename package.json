@@ -1,6 +1,6 @@
 {
 	"name": "restful-object",
-	"version": "0.7.1",
+	"version": "0.7.2",
 	"description": "A proxy that turns an object/function entity into a restful request generator",
 	"license": "MIT",
 	"repository": "YeasterEgg/restful-object",
@@ -25,8 +25,11 @@
 		"proxy",
 		"rest"
 	],
-	"dependencies": {},
+	"dependencies": {
+		"lodash": "^4.17.11"
+	},
 	"devDependencies": {
+		"@types/lodash": "^4.14.122",
 		"@types/node": "^11.10.4",
 		"typescript": "^3.3.3333"
 	}
