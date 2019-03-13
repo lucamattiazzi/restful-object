@@ -38,6 +38,15 @@ const methodHandlers = {
 		if (handlerFn) return handlerFn(path, completeOptions)
 		return { path, options: completeOptions }
 	},
+	patch: (path: string, options: RequestInit, handlerFn: HandlerFunction) => (
+		rawBody: Object,
+		specificOptions: RequestInit = {},
+	) => {
+		const body = typeof rawBody === 'string' ? rawBody : JSON.stringify(rawBody)
+		const completeOptions = merge({}, options, specificOptions, { method: 'PATCH', body })
+		if (handlerFn) return handlerFn(path, completeOptions)
+		return { path, options: completeOptions }
+	},
 	delete: (path: string, options: RequestInit, handlerFn: HandlerFunction) => (
 		body?: string | number,
 		specificOptions: RequestInit = {},

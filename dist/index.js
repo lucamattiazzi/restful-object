@@ -31,6 +31,13 @@ const methodHandlers = {
             return handlerFn(path, completeOptions);
         return { path, options: completeOptions };
     },
+    patch: (path, options, handlerFn) => (rawBody, specificOptions = {}) => {
+        const body = typeof rawBody === 'string' ? rawBody : JSON.stringify(rawBody);
+        const completeOptions = lodash_1.merge({}, options, specificOptions, { method: 'PATCH', body });
+        if (handlerFn)
+            return handlerFn(path, completeOptions);
+        return { path, options: completeOptions };
+    },
     delete: (path, options, handlerFn) => (body, specificOptions = {}) => {
         const completeOptions = lodash_1.merge({}, options, specificOptions, { method: 'DELETE' });
         if (handlerFn)
