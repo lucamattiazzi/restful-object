@@ -1,4 +1,6 @@
 import { merge } from 'lodash'
+const fetch = typeof window === 'undefined' ? require('node-fetch') : window.fetch
+
 export type HandlerFunction = (path: string, options: RequestInit) => any
 
 const voidFn = (): void => {}
@@ -58,26 +60,38 @@ const methodHandlers = {
 }
 
 export function RecursiveProxy(
-	handlerFn?: HandlerFunction,
-	options?: RequestInit,
+	basePath: string,
+	options: RequestInit = {},
+	cached: boolean = false,
+	cache: Map<string, any> = new Map(),
 	path: (string | number)[] = [],
 ): void {
+	const handlerFn = async (path: string, options: RequestInit) => {
+		if (cached && cache.has(path)) return Promise.resolve(cache.get(path))
+		const url = `${basePath}/${path}`
+		const results = await fetch(url, options)
+		const json = await results.json()
+		if (cached) cache.set(path, json)
+		console.log('cache', cache)
+		return json
+	}
 	function get(obj: Function, key: string) {
 		if (obj.hasOwnProperty(key)) return obj[key]
+		if (key === '_cache') return cache
 		if (methodHandlers.hasOwnProperty(key)) {
 			const joinedPath = path.join('/')
 			return methodHandlers[key](joinedPath, options, handlerFn)
 		}
 		if (typeof key === 'string') {
 			const completePath = [...path, key]
-			return new RecursiveProxy(handlerFn, options, completePath)
+			return new RecursiveProxy(basePath, options, cached, cache, completePath)
 		} else {
 			return () => path
 		}
 	}
 	function apply(_, __, args = []) {
 		const completePath = [...path, ...args]
-		const proxiedResult = new RecursiveProxy(handlerFn, options, completePath)
+		const proxiedResult = new RecursiveProxy(basePath, options, cached, cache, completePath)
 		return proxiedResult
 	}
 	return new Proxy(voidFn, { get, apply })
