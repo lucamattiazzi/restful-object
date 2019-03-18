@@ -54,16 +54,20 @@ const methodHandlers = {
         return { path, options: completeOptions };
     },
 };
-function RecursiveProxy(basePath, options = {}, cached = false, cache = new Map(), path = []) {
+function RecursiveProxy(basePath, options = {}, withCache = false, cache = new Map(), path = []) {
     const handlerFn = (path, options) => __awaiter(this, void 0, void 0, function* () {
-        if (cached && cache.has(path))
-            return Promise.resolve(cache.get(path));
+        const cacheKey = {
+            path,
+            method: options.method,
+        };
+        if (withCache && cache.has(cacheKey))
+            return Promise.resolve(cache.get(cacheKey).results);
         const url = `${basePath}/${path}`;
         const results = yield fetch(url, options);
         const json = yield results.json();
-        if (cached)
-            cache.set(path, json);
-        console.log('cache', cache);
+        const cacheValue = { results: json, time: Date.now() };
+        if (withCache && options.method === 'GET')
+            cache.set(cacheKey, cacheValue);
         return json;
     });
     function get(obj, key) {
@@ -77,7 +81,7 @@ function RecursiveProxy(basePath, options = {}, cached = false, cache = new Map(
         }
         if (typeof key === 'string') {
             const completePath = [...path, key];
-            return new RecursiveProxy(basePath, options, cached, cache, completePath);
+            return new RecursiveProxy(basePath, options, withCache, cache, completePath);
         }
         else {
             return () => path;
@@ -85,7 +89,7 @@ function RecursiveProxy(basePath, options = {}, cached = false, cache = new Map(
     }
     function apply(_, __, args = []) {
         const completePath = [...path, ...args];
-        const proxiedResult = new RecursiveProxy(basePath, options, cached, cache, completePath);
+        const proxiedResult = new RecursiveProxy(basePath, options, withCache, cache, completePath);
         return proxiedResult;
     }
     return new Proxy(voidFn, { get, apply });

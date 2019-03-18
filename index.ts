@@ -62,17 +62,21 @@ const methodHandlers = {
 export function RecursiveProxy(
 	basePath: string,
 	options: RequestInit = {},
-	cached: boolean = false,
-	cache: Map<string, any> = new Map(),
+	withCache: boolean = false,
+	cache: Map<object, any> = new Map(),
 	path: (string | number)[] = [],
 ): void {
 	const handlerFn = async (path: string, options: RequestInit) => {
-		if (cached && cache.has(path)) return Promise.resolve(cache.get(path))
+		const cacheKey = {
+			path,
+			method: options.method,
+		}
+		if (withCache && cache.has(cacheKey)) return Promise.resolve(cache.get(cacheKey).results)
 		const url = `${basePath}/${path}`
 		const results = await fetch(url, options)
 		const json = await results.json()
-		if (cached) cache.set(path, json)
-		console.log('cache', cache)
+		const cacheValue = { results: json, time: Date.now() }
+		if (withCache && options.method === 'GET') cache.set(cacheKey, cacheValue)
 		return json
 	}
 	function get(obj: Function, key: string) {
@@ -84,14 +88,14 @@ export function RecursiveProxy(
 		}
 		if (typeof key === 'string') {
 			const completePath = [...path, key]
-			return new RecursiveProxy(basePath, options, cached, cache, completePath)
+			return new RecursiveProxy(basePath, options, withCache, cache, completePath)
 		} else {
 			return () => path
 		}
 	}
 	function apply(_, __, args = []) {
 		const completePath = [...path, ...args]
-		const proxiedResult = new RecursiveProxy(basePath, options, cached, cache, completePath)
+		const proxiedResult = new RecursiveProxy(basePath, options, withCache, cache, completePath)
 		return proxiedResult
 	}
 	return new Proxy(voidFn, { get, apply })

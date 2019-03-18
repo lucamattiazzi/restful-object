@@ -1,6 +1,6 @@
 {
 	"name": "restful-object",
-	"version": "0.8.0",
+	"version": "0.9.0",
 	"description": "A proxy that turns an object/function entity into a restful request generator",
 	"license": "MIT",
 	"repository": "YeasterEgg/restful-object",
